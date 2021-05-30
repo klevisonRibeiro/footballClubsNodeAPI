@@ -7,5 +7,6 @@ router.get('/allClubs', clubsController.allClubs);
 router.get('/club/:id', clubsController.getClubById);
 router.delete('/club/:id', clubsController.deleteClubById);
 router.post('/club', clubsController.insertClub);
+router.put('/club', clubsController.updateClub);
 
 module.exports = router;

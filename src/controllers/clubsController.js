@@ -2,6 +2,7 @@ const clubsService = require('../services/clubsService');
 const assistantMethods = require('../assistantMethods/assistantMethods');
 
 module.exports = {
+
     allClubs: async (req, res) => {
         let response = {
             error: '',
@@ -44,10 +45,11 @@ module.exports = {
         let id = req.params.id;
         let club;
 
-        club = await clubsService.deleteClubById(id);
+        club = await clubsService.getClubById(id);
+        await clubsService.deleteClubById(id);
 
         if(club){
-            response.result = "Club with id = " + id + " deleted! >> " + JSON.stringify(club);
+            response.result = "Club  " + club[0].clubName + " deleted!";
             res.json(response);
         } else {                
             res.status(404).send({ error: "Not found any club with this id" });
@@ -55,35 +57,53 @@ module.exports = {
 
     },
 
-    // tentar inserir via raw postman
     insertClub: async (req, res) => {
         let response = {
             error: '',
             result: []
         };
         
-        let name, creationYear, clubCountry, insertResult;
+        let club, insertResult;
         let validationResponse = assistantMethods.validateInsertClubInput(req.body);
-        console.log(req.body);
+        // console.log(req.body);
 
         if(validationResponse.status != 200){
             res.status(validationResponse.status).send({ error: validationResponse.message });
         } else {
-            name = req.body.name;
-            creationYear = req.body.creationYear;
-            clubCountry = req.body.clubCountry;
-
-            insertResult = await clubsService.insertClub(name, creationYear, clubCountry);
-            response.result = {
-                name: name,
-                creationYear: creationYear,
-                clubCountry: clubCountry,
-                status: "Club inserted!"
+            club = req.body;
+            insertResult = await clubsService.insertClub(club);
+            response.result = {                
+                message: "Club " + club.name + " inserted!"
             }
-
             res.json(response);
-
         }
     },
+
+    updateClub: async (req, res) => {
+        let response = {
+            error: '',
+            result: []
+        };
+        
+        let updateResult, validationResponse;
+        let club = req.body; 
+        // console.log(req.body);
+
+        if(club.id){
+            validationResponse = assistantMethods.validateInsertClubInput(club);    
+
+            if(validationResponse.status != 200){
+                res.status(validationResponse.status).send({ error: validationResponse.message });
+            } else {
+                updateResult = await clubsService.updateClub(club);
+                response.result = {
+                    message: "Club " + club.name + " updated!"
+                }
+                res.json(response);
+            }
+        } else {
+            res.status(400).send({ error: "Field id is required!" });
+        }
+    }
 
 }

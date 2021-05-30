@@ -1,6 +1,7 @@
 const db = require('../db');
 
 module.exports = {
+
     allClubs: () => {
         return new Promise((accepted, denied) => {
             db.query('SELECT * FROM clubs', (error, results) => {
@@ -47,10 +48,15 @@ module.exports = {
         });
     },
 
-    insertClub: (name, creationYear, clubCountry) => {
+    insertClub: (club) => {
         return new Promise((accepted, denied) => {
-            db.query('INSERT INTO clubs (clubName, creationYear, clubCountry) VALUES (?, ?, ?)', 
-                [name, creationYear, clubCountry], 
+            db.query('INSERT INTO clubs (clubName, creationYear, clubCountry, internationalTrophies,' +
+             ' continentalTrophies, nationalTrophies, regionalTrophies)' +
+             ' VALUES (?, ?, ?, ?, ?, ?, ?)', 
+                [
+                    club.name, club.creationYear, club.clubCountry, club.internationalTrophies, 
+                    club.continentalTrophies, club.nationalTrophies, club.regionalTrophies
+                ], 
                 (error, results) => {
                     if(error) {
                         denied(error); 
@@ -60,5 +66,29 @@ module.exports = {
                 }
             );
         });
+    },
+
+    updateClub: (club) => {
+        return new Promise((accepted, denied) => {
+            db.query('UPDATE clubs ' +
+                'SET clubName = ?, creationYear = ?, clubCountry = ?, ' +
+                'internationalTrophies = ?, continentalTrophies = ?, nationalTrophies = ?,' +
+                'regionalTrophies = ? WHERE clubId = ?', 
+                [
+                    club.name, club.creationYear, club.clubCountry, 
+                    club.internationalTrophies, club.continentalTrophies, club.nationalTrophies,
+                    club.regionalTrophies, club.id
+                ], 
+                (error, results) => {
+                    if(error) {
+                        denied(error); 
+                        return;
+                    } 
+                    accepted(results);
+                }
+            );
+        });
     }
+
+
 };
