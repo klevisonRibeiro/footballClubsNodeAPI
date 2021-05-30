@@ -5,3 +5,22 @@ ER_NOT_SUPPORTED_AUTH_MODE: Client does not support authentication protocol requ
     ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password'
     flush privileges
 
+============================================================
+
+>> bodyparser deprecated
+server.js (DIFERENÇA NO COMMIT "INSERT AND DELETE METHODS" E ANTERIOR)
+
+const express = require('express');
+const consign = require('consign');
+
+module.exports = () => {    
+    const app = express();
+    app.use(express.json())
+    app.use(express.urlencoded({ extended: true}))
+    consign()
+        .include('controllers')
+        .into(app)
+    return app;
+}
+
+============================================================
