@@ -1,14 +1,13 @@
 require('dotenv').config({path:'vars.env'});
+
 const express = require('express');
 const cors = require('cors');
-const bodyParser = require('body-parser');
-
 const routes = require('./routes');
-
 const server = express();
-server.use(cors());
-server.use(bodyParser.urlencoded({extended: false}));
 
+server.use(cors());
+server.use(express.json())
+server.use(express.urlencoded({ extended: true}))
 server.use('/api', routes);
 
 server.listen(process.env.PORT, ()=> {
