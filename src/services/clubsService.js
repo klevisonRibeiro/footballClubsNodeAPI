@@ -1,3 +1,4 @@
+const { response } = require('express');
 const db = require('../db');
 
 module.exports = {
@@ -88,7 +89,45 @@ module.exports = {
                 }
             );
         });
-    }
+    },
 
+    getLeague: (leagueId) => {
+        
+        // request way-1 (working)
+        let XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+
+        let resourceUrl = "https://v3.football.api-sports.io/leagues?id=" + leagueId;
+        
+        let xhttp = new XMLHttpRequest();
+        xhttp.open("GET", resourceUrl, false);
+    
+        xhttp.setRequestHeader("x-rapidapi-host", "v3.football.api-sports.io");
+        xhttp.setRequestHeader("x-rapidapi-key", "3cab8249610ac29c980a4351b6531dbe");
+    
+        xhttp.send();
+        
+        let result = JSON.parse(xhttp.responseText);
+        return result;
+
+        // request way-2 (not working)
+        // var request = require("request");
+        // var options = {
+        // method: 'GET',
+        // url: 'https://v3.football.api-sports.io/leagues?id=' + leagueId,
+        // headers: {
+        //     'x-rapidapi-host': 'v3.football.api-sports.io',
+        //     'x-rapidapi-key': '3cab8249610ac29c980a4351b6531dbe'
+        // }
+        // };
+
+        // request(options, function (error, response, body) {
+        //     if (error) throw new Error(error);
+
+        //     //console.log(body);
+        //     return body;
+        // });
+
+        
+    }
 
 };

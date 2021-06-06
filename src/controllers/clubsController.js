@@ -104,6 +104,20 @@ module.exports = {
         } else {
             res.status(400).send({ error: "Field id is required!" });
         }
+    },
+
+    getLeague: async (req, res) => {
+        let response = {
+            error: '',
+            result: ''
+        };
+
+        let leagueId = req.params.leagueId;
+        let league = await clubsService.getLeague(leagueId);
+        response.result = league.response;
+        
+        res.json(response);
+
     }
 
 }
