@@ -6,4 +6,6 @@
 - npm install express mysql dotenv cors body-parser
 - npm install nodemon --save-dev
 - create database: file in the main folder (dataBaseSqlFile.sql)
+- install xmlhttprequest and request
+
 
